@@ -3,7 +3,11 @@ require 'rails_helper'
 RSpec.describe ApplicationController, type: :controller do
   controller do
     def index
-      render plain: "Hello, World!"
+      render plain: "[INDEX] Hello, World!"
+    end
+
+    def show
+      render plain: "[SHOW] Hello, World #{params[:id]}"
     end
 
     def not_found
@@ -15,7 +19,15 @@ RSpec.describe ApplicationController, type: :controller do
     it 'renders the index page with correct status' do
       get :index
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include("Hello, World!")
+      expect(response.body).to include("[INDEX] Hello, World!")
+    end
+  end
+
+  describe 'GET #show' do
+    it 'renders the show page with correct status' do
+      get :show, params: { id: 1 }
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("[SHOW] Hello, World 1")
     end
   end
 
